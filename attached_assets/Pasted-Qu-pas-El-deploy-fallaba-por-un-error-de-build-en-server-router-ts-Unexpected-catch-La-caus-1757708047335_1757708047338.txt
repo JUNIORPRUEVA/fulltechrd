@@ -1,0 +1,73 @@
+Qué pasó
+
+El deploy fallaba por un error de build en server/router.ts (“Unexpected catch”).
+
+La causa era un bloque duplicado en la ruta POST /api/objects/finalize (llaves desbalanceadas).
+
+Ya entregué server/router.ts corregido (sin duplicados) y con rutas de subida S3 compatibles (claves nuevas y legacy).
+
+Cómo funciona la app (resumen)
+
+Monorepo Vite (frontend) + Express (backend).
+
+Auth: sesiones en Postgres (connect-pg-simple). Roles: admin (panel) y customer (Google/phone).
+
+Almacenamiento de archivos en MinIO/SeaweedFS vía S3:
+
+Pedir URL de subida (compat): POST /api/objects/upload o POST /api/upload-url.
+
+Respuesta trae: method=PUT, uploadUrl (y alias legacy uploadURL/url) y objectPath.
+
+Subir con PUT directo a S3 usando Content-Type real.
+
+Finalizar (opcional, normaliza ACL/paths): POST /api/objects/finalize con { uploaded: [objectPath | url] }.
+
+Servir imágenes: GET /uploads/:objectPath (normaliza uploads/...).
+
+Front ya usa componentes FileUploader/ObjectUploader e ImageLoader actualizado. Nota: cuando el front reciba uploadUrl con &amp;, debe tratarse como &.
+
+Variables y flags importantes
+
+S3_ENDPOINT, S3_ACCESS_KEY, S3_SECRET_KEY, S3_BUCKET_NAME.
+
+APPLY_S3_CORS_ON_BOOT=true y S3_ALLOWED_ORIGINS (incluye https://fulltechchrd.com, https://www.fulltechchrd.com, http://localhost:5173, y https://*.replit.dev).
+
+DATABASE_URL, SESSION_SECRET.
+
+Qué debe hacer el agente para resolver y verificar
+
+Asegurarse de que el repo tenga el server/router.ts corregido (el que envié).
+
+Limpiar caché de build e instalar de cero (npm ci).
+
+Verificar que los ENV de arriba están configurados en el servicio de Easypanel/Replit.
+
+Desplegar nuevamente.
+
+Comprobaciones rápidas:
+
+GET /api/health debe responder ok:true.
+
+Login admin: POST /api/admin/login.
+
+Flujo de subida:
+
+POST /api/upload-url → obtener uploadUrl y objectPath.
+
+PUT uploadUrl con un archivo pequeño (Content-Type correcto).
+
+(Opcional) POST /api/objects/finalize con { uploaded: [objectPath] }.
+
+GET /uploads/<uuid> debe devolver la imagen.
+
+Si algo falla en CORS de S3, revisar logs: el backend aplica CORS automáticamente al iniciar cuando APPLY_S3_CORS_ON_BOOT=true.
+
+Señales en logs que indican salud
+
+[express] serving on port 5000
+
+[objectStorage] ✅ CORS aplicado correctamente
+
+[routes] ✅ Imagen encontrada: uploads/... (cuando se sirven imágenes)
+
+Ausencia del error “Unexpected catch”.
