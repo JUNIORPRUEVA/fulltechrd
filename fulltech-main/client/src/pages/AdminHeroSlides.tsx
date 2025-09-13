@@ -72,10 +72,18 @@ export default function AdminHeroSlides() {
     <div className="space-y-6">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl lg:text-2xl font-bold text-gray-900">Gestión de Hero Slides</h2>
-          <p className="text-gray-600">Administra las imágenes del carrusel principal</p>
+          <h2 className="text-xl lg:text-2xl font-bold text-gray-900">
+            Gestión de Hero Slides
+          </h2>
+          <p className="text-gray-600">
+            Administra las imágenes del carrusel principal
+          </p>
         </div>
-        <Button onClick={handleCreate} className="lg:w-auto" data-testid="button-create-hero-slide">
+        <Button
+          onClick={handleCreate}
+          className="lg:w-auto"
+          data-testid="button-create-hero-slide"
+        >
           <i className="fas fa-plus mr-2"></i>
           Crear Hero Slide
         </Button>
@@ -84,7 +92,9 @@ export default function AdminHeroSlides() {
       {/* Statistics */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
         <div className="bg-white rounded-lg shadow p-4">
-          <div className="text-2xl font-bold text-blue-600">{slides.length}</div>
+          <div className="text-2xl font-bold text-blue-600">
+            {slides.length}
+          </div>
           <div className="text-sm text-gray-600">Total slides</div>
         </div>
         <div className="bg-white rounded-lg shadow p-4">
@@ -118,7 +128,9 @@ export default function AdminHeroSlides() {
           <div className="p-8 text-center">
             <i className="fas fa-images text-4xl text-gray-400 mb-4"></i>
             <p className="text-gray-600 mb-2">No hay slides configurados</p>
-            <p className="text-sm text-gray-500">Comienza creando tu primer hero slide</p>
+            <p className="text-sm text-gray-500">
+              Comienza creando tu primer hero slide
+            </p>
           </div>
         ) : (
           <div className="overflow-hidden">
@@ -148,57 +160,63 @@ export default function AdminHeroSlides() {
                   {slides
                     .sort((a: HeroSlide, b: HeroSlide) => a.order - b.order)
                     .map((slide: HeroSlide) => (
-                    <tr key={slide.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4">
-                        <img 
-                          src={slide.imageUrl} 
-                          alt={slide.title}
-                          className="h-16 w-24 rounded-lg object-cover"
-                        />
-                      </td>
-                      <td className="px-6 py-4">
-                        <div>
-                          <div className="text-sm font-medium text-gray-900">{slide.title}</div>
-                          <div className="text-sm text-gray-500 truncate max-w-xs">
-                            {slide.subtitle}
+                      <tr key={slide.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4">
+                          <img
+                            src={slide.imageUrl}
+                            alt={slide.title}
+                            className="h-16 w-24 rounded-lg object-cover"
+                          />
+                        </td>
+                        <td className="px-6 py-4">
+                          <div>
+                            <div className="text-sm font-medium text-gray-900">
+                              {slide.title}
+                            </div>
+                            <div className="text-sm text-gray-500 truncate max-w-xs">
+                              {slide.subtitle}
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-900">
-                        <Badge variant="outline">{slide.order}</Badge>
-                      </td>
-                      <td className="px-6 py-4">
-                        <Badge 
-                          variant={slide.active ? "default" : "secondary"}
-                          className={slide.active ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"}
-                        >
-                          {slide.active ? "Activo" : "Inactivo"}
-                        </Badge>
-                      </td>
-                      <td className="px-6 py-4 text-sm">
-                        <div className="flex gap-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleEdit(slide)}
-                            data-testid={`button-edit-slide-${slide.id}`}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-900">
+                          <Badge variant="outline">{slide.order}</Badge>
+                        </td>
+                        <td className="px-6 py-4">
+                          <Badge
+                            variant={slide.active ? "default" : "secondary"}
+                            className={
+                              slide.active
+                                ? "bg-green-100 text-green-800"
+                                : "bg-gray-100 text-gray-800"
+                            }
                           >
-                            <i className="fas fa-edit"></i>
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => deleteMutation.mutate(slide.id)}
-                            disabled={deleteMutation.isPending}
-                            className="text-red-600 hover:text-red-700"
-                            data-testid={`button-delete-slide-${slide.id}`}
-                          >
-                            <i className="fas fa-trash"></i>
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                            {slide.active ? "Activo" : "Inactivo"}
+                          </Badge>
+                        </td>
+                        <td className="px-6 py-4 text-sm">
+                          <div className="flex gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleEdit(slide)}
+                              data-testid={`button-edit-slide-${slide.id}`}
+                            >
+                              <i className="fas fa-edit"></i>
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => deleteMutation.mutate(slide.id)}
+                              disabled={deleteMutation.isPending}
+                              className="text-red-600 hover:text-red-700"
+                              data-testid={`button-delete-slide-${slide.id}`}
+                            >
+                              <i className="fas fa-trash"></i>
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
@@ -208,55 +226,63 @@ export default function AdminHeroSlides() {
               {slides
                 .sort((a: HeroSlide, b: HeroSlide) => a.order - b.order)
                 .map((slide: HeroSlide) => (
-                <div key={slide.id} className="p-4">
-                  <div className="flex gap-4">
-                    <img 
-                      src={slide.imageUrl} 
-                      alt={slide.title}
-                      className="h-16 w-20 rounded-lg object-cover flex-shrink-0"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <h4 className="text-sm font-medium text-gray-900 truncate">
-                            {slide.title}
-                          </h4>
-                          <p className="text-xs text-gray-500 mt-1 truncate">{slide.subtitle}</p>
+                  <div key={slide.id} className="p-4">
+                    <div className="flex gap-4">
+                      <img
+                        src={slide.imageUrl}
+                        alt={slide.title}
+                        className="h-16 w-20 rounded-lg object-cover flex-shrink-0"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <h4 className="text-sm font-medium text-gray-900 truncate">
+                              {slide.title}
+                            </h4>
+                            <p className="text-xs text-gray-500 mt-1 truncate">
+                              {slide.subtitle}
+                            </p>
+                          </div>
+                          <div className="flex gap-2 ml-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleEdit(slide)}
+                              data-testid={`button-edit-slide-mobile-${slide.id}`}
+                            >
+                              <i className="fas fa-edit text-xs"></i>
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => deleteMutation.mutate(slide.id)}
+                              disabled={deleteMutation.isPending}
+                              className="text-red-600"
+                              data-testid={`button-delete-slide-mobile-${slide.id}`}
+                            >
+                              <i className="fas fa-trash text-xs"></i>
+                            </Button>
+                          </div>
                         </div>
-                        <div className="flex gap-2 ml-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleEdit(slide)}
-                            data-testid={`button-edit-slide-mobile-${slide.id}`}
+                        <div className="flex items-center gap-2 mt-2">
+                          <Badge variant="outline" className="text-xs">
+                            Orden: {slide.order}
+                          </Badge>
+                          <Badge
+                            variant={slide.active ? "default" : "secondary"}
+                            className={
+                              slide.active
+                                ? "text-xs bg-green-100 text-green-800"
+                                : "text-xs bg-gray-100 text-gray-800"
+                            }
                           >
-                            <i className="fas fa-edit text-xs"></i>
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => deleteMutation.mutate(slide.id)}
-                            disabled={deleteMutation.isPending}
-                            className="text-red-600"
-                            data-testid={`button-delete-slide-mobile-${slide.id}`}
-                          >
-                            <i className="fas fa-trash text-xs"></i>
-                          </Button>
+                            {slide.active ? "Activo" : "Inactivo"}
+                          </Badge>
                         </div>
-                      </div>
-                      <div className="flex items-center gap-2 mt-2">
-                        <Badge variant="outline" className="text-xs">Orden: {slide.order}</Badge>
-                        <Badge 
-                          variant={slide.active ? "default" : "secondary"}
-                          className={slide.active ? "text-xs bg-green-100 text-green-800" : "text-xs bg-gray-100 text-gray-800"}
-                        >
-                          {slide.active ? "Activo" : "Inactivo"}
-                        </Badge>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
         )}
